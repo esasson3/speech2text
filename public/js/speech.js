@@ -58,6 +58,7 @@
                 createEmail();
             }
         };
+
         recognition.onresult = function(event) {
             var interim_transcript = '';
             for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -74,6 +75,7 @@
                 showButtons('inline-block');
             }
         };
+
     }
 
     function upgrade() {

@@ -4,6 +4,8 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+
+let globalArrTones = [];
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
@@ -248,7 +250,7 @@ function allReady(thresholds, sampleText) {
 
     //Populate sentencesTone with all unique tones in sentences, to be displayed in sentence view
     sentences.forEach(function(elements) {
-      console.log(elements)
+      globalArrTones.push(elements);
       elements.tones.forEach(function(item) {
         if (sentenceTone[item.tone_id] == null || sentenceTone[item.tone_id].score < item.score) {
           sentenceTone[item.tone_id] = item;
@@ -312,13 +314,6 @@ function allReady(thresholds, sampleText) {
         'As the CPU cores cool off a bit, wait a few seonds before sending more requests.';
     }
 
-    $errorMessage.html(_.template(errorMessage_template, {
-      items: [{
-        errorCode: error.responseJSON.code,
-        errorMessage: message
-      }]
-    }));
-
     $input.show();
     $loading.hide();
     $output.hide();
@@ -341,8 +336,24 @@ function allReady(thresholds, sampleText) {
   $submitButton.click(function() {
     lastSentenceID = null;
     getToneAnalysis(final_transcript);
+    getToneAnalysis($textarea.val());
+
+
+    setTimeout(showJson, 3000)
   });
 
-}
 
+function showJson() {
+    let test = document.createElement('div');
+
+    for (let i = 0; i < globalArrTones.length; i++) {
+      let data = JSON.stringify(globalArrTones[i]);
+      let item = document.createElement('pre')
+      item.innerHTML = data;
+      test.appendChild(item);
+    }
+    let jsonOutput = document.getElementById('jsonOutput');
+        jsonOutput.appendChild(test);
+  }
+}
 $(document).ready(ready);
