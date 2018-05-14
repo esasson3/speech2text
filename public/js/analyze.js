@@ -70,6 +70,15 @@ if (!('webkitSpeechRecognition' in window)) {
                 interim_transcript += event.results[i][0].transcript;
             }
         }
+        
+        
+        var shown_transcript = final_transcript;
+//        getToneAnalysis(shown_transcript);
+        
+        // analyze shown_transcript
+        // use analyzer results to change final_transcript
+        
+        
         final_transcript = capitalize(final_transcript);
         final_span.innerHTML = linebreak(final_transcript);
         interim_span.innerHTML = linebreak(interim_transcript);
@@ -98,37 +107,37 @@ function capitalize(s) {
     });
 }
 
-function createEmail() {
-    var n = final_transcript.indexOf('\n');
-    if (n < 0 || n >= 80) {
-        n = 40 + final_transcript.substring(40).indexOf(' ');
-    }
-    var subject = encodeURI(final_transcript.substring(0, n));
-    var body = encodeURI(final_transcript.substring(n + 1));
-    window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-}
+//function createEmail() {
+//    var n = final_transcript.indexOf('\n');
+//    if (n < 0 || n >= 80) {
+//        n = 40 + final_transcript.substring(40).indexOf(' ');
+//    }
+//    var subject = encodeURI(final_transcript.substring(0, n));
+//    var body = encodeURI(final_transcript.substring(n + 1));
+//    window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+//}
 
-function copyButton() {
-    if (recognizing) {
-        recognizing = false;
-        recognition.stop();
-    }
-    copy_info.style.display = 'inline-block';
-    showInfo('');
-}
+//function copyButton() {
+//    if (recognizing) {
+//        recognizing = false;
+//        recognition.stop();
+//    }
+//    copy_info.style.display = 'inline-block';
+//    showInfo('');
+//}
 
-function emailButton() {
-    if (recognizing) {
-        create_email = true;
-        recognizing = false;
-        recognition.stop();
-    } else {
-        createEmail();
-    }
-    email_button.style.display = 'none';
-    email_info.style.display = 'inline-block';
-    showInfo('');
-}
+//function emailButton() {
+//    if (recognizing) {
+//        create_email = true;
+//        recognizing = false;
+//        recognition.stop();
+//    } else {
+//        createEmail();
+//    }
+//    email_button.style.display = 'none';
+//    email_info.style.display = 'inline-block';
+//    showInfo('');
+//}
 
 function startButton(event) {
     if (recognizing) {
@@ -229,6 +238,8 @@ function allReady(thresholds, sampleText) {
     $error.hide();
     $output.show();
     // scrollTo($output);
+      
+    console.log(data)
 
     var emotionTone = data.document_tone.tones.slice(0),
       selectedSample = $('input[name=rb]:checked').val(),
@@ -260,7 +271,27 @@ function allReady(thresholds, sampleText) {
     sentenceTone = Object.keys(sentenceTone).sort().map(function(obj) {
       return sentenceTone[obj];
     });
-
+      
+    console.log(sentenceTone);
+    var i;
+    for (i = 0; i < sentenceTone.length; i++) {
+        if (sentenceTone[i].tone_id == "analytical") {
+            final_transcript += '?';
+            }
+        if (sentenceTone[i].tone_id == "joy"){
+            final_transcript += '!';
+            final_transcipt.italics();
+        }
+        if (sentenceTone[i].tone_id == "fear") {
+            final_transcipt.italics();
+        }
+    }
+       
+    final_transcript = capitalize(final_transcript);
+    final_span.innerHTML = linebreak(final_transcript);
+    interim_span.innerHTML = linebreak(interim_transcript);
+    if (final_transcript || interim_transcript) {
+                showButtons('inline-block'); }
 
     app = new App(data.document_tone, sentences, thresholds, selectedSample, sentenceTone);
     /**
@@ -284,6 +315,7 @@ function allReady(thresholds, sampleText) {
     }
 
     emotionTone = app.getDocumentToneDefault();
+      
     // Update scores for the tones present in response at document level
     if (typeof(data.document_tone.tones) !== 'undefined' && data.document_tone.tones !== null) {
       data.document_tone.tones.forEach(function(element) {
