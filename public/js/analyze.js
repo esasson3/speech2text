@@ -1,149 +1,3 @@
-showInfo('info_start');
-var create_email = false;
-var final_transcript = '';
-var recognizing = false;
-var ignore_onend;
-var start_timestamp;
-
-let globalArrTones = [];
-if (!('webkitSpeechRecognition' in window)) {
-    upgrade();
-} else {
-    start_button.style.display = 'inline-block';
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.onstart = function() {
-        recognizing = true;
-        showInfo('info_speak_now');
-        start_img.src = '/images/mic-animate.gif';
-    };
-    recognition.onerror = function(event) {
-        if (event.error == 'no-speech') {
-            start_img.src = '/images/mic.gif';
-            showInfo('info_no_speech');
-            ignore_onend = true;
-        }
-        if (event.error == 'audio-capture') {
-            start_img.src = '/images/mic.gif';
-            showInfo('info_no_microphone');
-            ignore_onend = true;
-        }
-        if (event.error == 'not-allowed') {
-            if (event.timeStamp - start_timestamp < 100) {
-                showInfo('info_blocked');
-            } else {
-                showInfo('info_denied');
-            }
-            ignore_onend = true;
-        }
-    };
-    recognition.onend = function() {
-        recognizing = false;
-        if (ignore_onend) {
-            return;
-        }
-        start_img.src = '/images/mic.gif';
-        if (!final_transcript) {
-            showInfo('info_start');
-            return;
-        }
-        showInfo('');
-        if (window.getSelection) {
-            window.getSelection().removeAllRanges();
-            var range = document.createRange();
-            range.selectNode(document.getElementById('final_span'));
-            window.getSelection().addRange(range);
-        }
-        if (create_email) {
-            create_email = false;
-            createEmail();
-        }
-    };
-
-    recognition.onresult = function(event) {
-        var interim_transcript = '';
-        for (var i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                final_transcript += event.results[i][0].transcript;
-            } else {
-                interim_transcript += event.results[i][0].transcript;
-            }
-        }
-
-
-        var shown_transcript = final_transcript;
-
-        final_transcript = capitalize(final_transcript);
-        final_span.innerHTML = linebreak(final_transcript);
-        interim_span.innerHTML = linebreak(interim_transcript);
-        if (final_transcript || interim_transcript) {
-            showButtons('inline-block');
-        }
-    };
-
-}
-
-function upgrade() {
-    start_button.style.visibility = 'hidden';
-    showInfo('info_upgrade');
-}
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-
-function linebreak(s) {
-    return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-}
-var first_char = /\S/;
-
-function capitalize(s) {
-    return s.replace(first_char, function(m) {
-        return m.toUpperCase();
-    });
-}
-
-function startButton(event) {
-    if (recognizing) {
-        recognition.stop();
-        return;
-    }
-    final_transcript = '';
-    recognition.lang = 'en-US';
-    recognition.start();
-    ignore_onend = false;
-    final_span.innerHTML = '';
-    interim_span.innerHTML = '';
-    start_img.src = '/images/mic-slash.gif';
-    showInfo('info_allow');
-    start_timestamp = event.timeStamp;
-}
-
-function showInfo(s) {
-    if (s) {
-        for (var child = info.firstChild; child; child = child.nextSibling) {
-            if (child.style) {
-                child.style.display = child.id == s ? 'inline' : 'none';
-            }
-        }
-        info.style.visibility = 'visible';
-    } else {
-        info.style.visibility = 'hidden';
-    }
-}
-var current_style;
-
-function showButtons(style) {
-    if (style == current_style) {
-        return;
-    }
-    current_style = style;
-    email_button.style.display = style;
-    copy_info.style.display = 'none';
-    email_info.style.display = 'none';
-}
-
-
-
 
 function ready() {
   // CSRF protection
@@ -179,6 +33,7 @@ function ready() {
  * @return {undefined}
  */
 function allReady(thresholds, sampleText) {
+  let globalArrTones = [];
   var $input = $('.input'),
     $output = $('.output'),
     $loading = $('.loading'),
@@ -189,6 +44,35 @@ function allReady(thresholds, sampleText) {
     $originalTexts = $('.original-text--texts'),
     selectedLang = 'en',
     lastSentenceID;
+
+
+    let myRec = new p5.SpeechRec('en-US', parseResult);
+    myRec.continuous = true;
+
+      $('#start_button').on('click', function() {
+        myRec.start();
+        myRec.onResult = parseResult;
+      });
+
+
+    function parseResult() {
+      let result = myRec.resultString;
+      let parts = getPartsOfSpeech(result);
+
+      getToneAnalysis(result);
+    }
+
+    function getPartsOfSpeech(input) {
+      return RiTa.getPosTags(input, true);
+    }
+
+
+
+
+
+
+
+
 
   /**
    * Callback function for AJAX post to get tone analyzer data
@@ -236,25 +120,7 @@ function allReady(thresholds, sampleText) {
     });
 
     console.log(sentenceTone);
-    var i;
-    for (i = 0; i < sentenceTone.length; i++) {
-        if (sentenceTone[i].tone_id == "analytical") {
-            final_transcript += '?';
-            }
-        if (sentenceTone[i].tone_id == "joy"){
-            final_transcript += '!';
-            final_transcipt.italics();
-        }
-        if (sentenceTone[i].tone_id == "fear") {
-            final_transcipt.italics();
-        }
-    }
 
-    final_transcript = capitalize(final_transcript);
-    final_span.innerHTML = linebreak(final_transcript);
-    interim_span.innerHTML = linebreak(interim_transcript);
-    if (final_transcript || interim_transcript) {
-                showButtons('inline-block'); }
 
     app = new App(data.document_tone, sentences, thresholds, selectedSample, sentenceTone);
     /**
@@ -309,10 +175,6 @@ function allReady(thresholds, sampleText) {
         'As the CPU cores cool off a bit, wait a few seonds before sending more requests.';
     }
 
-    $input.show();
-    $loading.hide();
-    $output.hide();
-    $error.show();
   }
 
   /**
@@ -329,10 +191,10 @@ function allReady(thresholds, sampleText) {
    * Submit button click event
    */
   $submitButton.click(function() {
-    lastSentenceID = null;
-    getToneAnalysis(final_transcript);
-    getToneAnalysis($textarea.val());
-
+    lastSentenceID = null
+    // getToneAnalysis(final_transcript);
+    // getToneAnalysis($textarea.val());
+    // TODO: call getToneAnalysis() HERE when the speech is complete.
 
     setTimeout(showJson, 3000)
   });

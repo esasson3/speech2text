@@ -25,36 +25,23 @@
             <p id="info_upgrade">Web Speech API is not supported by this browser. Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 25 or later.</p>
         </div>
         <div class="right">
-            <button id="start_button" onclick="startButton(event)">
-        <img id="start_img" src="/images/mic.gif" alt="Start"></button>
-        </div>
+            <button id="start_button">
+              <img id="start_img" src="/images/mic.gif" alt="Start">
+            </button>
+      
+          </div>
         <div id="results">
             <span id="final_span" class="final"></span>
             <span id="interim_span" class="interim"></span>
             <p>
         </div>
     </div>
-    <script src="js/speech.js"></script>
+    <script src="js/p5/p5.js"></script>
+    <script src="js/p5speech.js"></script>
 
 
-    <div class="_demo--container center">
-        <article class="_content base--article">
-            <div class="panel">
-                <textarea class="base--textarea input--textarea" rows="7"></textarea>
-                <div class="input--choose own-text-language-selector-radio original-text--tooltip-container_hidden">
-                </div>
-            </div>
-            <div class="input">
-                <div class="input--submit-button-container">
-                    <button class="base--button input--submit-button" type="submit"> Analyze</button>
-                </div>
-            </div>
 
-            <div class="error">
-                <div class="error--message"></div>
-            </div>
-        </article>
-    </div>
+
     <div id="toneOutput">
       <h3>JSON Output</h3>
       <div id="jsonOutput">
@@ -69,6 +56,8 @@
     <script type="text/javascript" src="js/components/App.js"></script>
     <script type="text/javascript" src="js/rita-full.js"></script>
     <script type="text/javascript" src="js/analyze.js"></script>
+    <script src="js/main.js"></script>
+
 
 </body>
 
