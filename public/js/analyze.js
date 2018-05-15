@@ -60,6 +60,11 @@ function allReady(thresholds, sampleText) {
       let parts = getPartsOfSpeech(result);
 
       getToneAnalysis(result);
+
+      result = result.split(' ');
+      console.log(result, "This is the sentence")
+      console.log(parts, "These are the parts of speech")
+
     }
 
     function getPartsOfSpeech(input) {
