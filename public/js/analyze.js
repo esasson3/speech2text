@@ -62,9 +62,9 @@ function allReady(thresholds, sampleText) {
       getToneAnalysis(result);
 
       result = result.split(' ');
-      console.log(result, "This is the sentence")
-      console.log(parts, "These are the parts of speech")
+      console.log(result, "This is the sentence") // ['I', 'think', 'you', 'are', 'good']
 
+      console.log(parts, "These are the parts of speech") // ['n', 'v', 'n', 'v', 'adj']
     }
 
     function getPartsOfSpeech(input) {
@@ -73,10 +73,23 @@ function allReady(thresholds, sampleText) {
 
 
 
+    function writePoem(tone, text, parts) {
+      // tone = 'analytical'
+      // text = array of words
+      // parts = array of parts
 
+      if (tone == 'analytical') {
+        makeAnalytical(text, parts);
+      } else if (tone === 'sad') {
+        makeSad(text, parts)
+      } else {
+        // if no tone
+      }
+    }
 
+    function makeAnalytical(text, parts) {
 
-
+    }
 
 
   /**
