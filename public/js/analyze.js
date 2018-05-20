@@ -3,7 +3,7 @@ let joy = ['bright', 'upbeat', 'glory', 'yellow', 'dynamic', 'alive', 'blissed',
 
 let fear = ['scared', 'sinister', 'tremble', 'shadowy', 'anxious', 'suspect',
 'shady', 'phobia', 'panic', 'alarm', 'risk', 'danger',
-'gamble', 'stakes', 'leap', 'trap', 'exposure', 'vulnerable'];
+'gamble', 'stakes', 'leap', 'trap', 'exposgure', 'vulnerable'];
 
 let sadness = ['down', 'gloomy', "melancholy", 'misfortune',
 'pathos', 'woeful', 'blue', 'desolate', 'downbeat', 'downcast', 'flat', 'gloom', 'heavy',
@@ -51,7 +51,7 @@ myRec.continuous = true;
       return RiTa.getPosTags(input, true);
   }
 
-  $('#start_button').on('click', function() { // on click, start recording
+  $('#start_button').on('click', function() { // On click, start recording
       myRec.start();
       myRec.onResult = parseSpeech;
     });
@@ -60,40 +60,42 @@ myRec.continuous = true;
     let input = myRec.resultString;
     let parts = getPartsOfSpeech(input);
     let result = input.split(' ');
-    let sentenceTones;
 
     let tonesArr = [];
-    if (input.length > 0) {
-      getToneAnalysis(input);
-      setTimeout(timeOutTones(globalTones, tonesArr), 1000); //pass parts and result here to make poems
+
+    if (input.length > 0) {  // If we have any sort of input, follow this codepath to send to API
+      getToneAnalysis(input); // Pushes the tones into a global array, then pass that array to the timeout function -> timeoutTones
+      setTimeout(timeOutTones(globalTones, tonesArr, parts, result), 1000);  // This timout allows the API results to come back and populate the tonesArray
     }
 
-  }
 
-
-  function timeOutTones(tones, arr) {
+  function timeOutTones(tones, arr, parts, result) {
     return function() {
       for(let i = 0; i < tones.length; i++) {
         arr.push(tones[i])
       }
-      determinesLanguage(arr);
-      globalTones = [];
+      determinesLanguage(arr, parts, result);
+      globalTones = []; // Resets the global array to be empty
     }
   }
 
 
-  function determinesLanguage(tones) {
-    let languageTone = tones[1],
-        emotionTone = tones[0];
-    // let secondaryEmotion;
-    //
-    // if (tones[2]) { // This only get set if there are multiple feelings
-    //   secondaryEmotion = tones[2];
-    //   console.log(secondaryEmotion)
-    // }
-    console.log(tones)
+  /*
+    EXAMPLE
+
+    tones =  ["Joy", "Analytical", "Tentative"]
+    parts = ["n", "r", "v", "-", "n"]
+    result =  ["I'm", "really", "excited", "about", "today"]
+  */
+
+  function determinesLanguage(tones, parts, result) {
+
+    console.log(tones, parts, result) // These are all the parameters you have to build new poems with
+    let languageTone = tones[1], // languageTone is analytical/confident/tentative OR passive if theres no tone in that position
+        emotionTone = tones[0]; // emotionTone is joy/fear/sadness etc.
+
     if (languageTone == 'Analytical') {
-      console.log('Analytical')
+      makeAnalytical(emotionTone, parts, result)
     } else if (languageTone == 'Confident') {
       console.log('Confident')
     } else if (languageTone == 'Tentative') {
@@ -104,12 +106,40 @@ myRec.continuous = true;
   }
 
 
-  function makeAnalytical() {
+    /*
+      Fill out the functions for each structure, follow the directions in makeAnalytical and complete for all functions
+    */
+    function makeAnalytical(emotionTone, parts, result) {
+      /*
+          use parts to get the position of a part of speech
+          use result to replace an actual word in the arry
+          use emotionTone to choose which array to pick from (joy, fear, etc)
+      */
+
+      /*
+        when you've finished subbing words in the array, use javascript native array method join()
+        i.e.     result =  ["I'm", "really", "excited", "about", "today"]
+        let finalString = result.join(' ');
+        * finalString will be 'I'm really excited about today'
+      */
+    }
+
+    function makeConfident() {
+
+    }
+
+    function makeTentative() {
+
+    }
+
+    function makePassive() {
 
   }
+
+
+  }
+
 }
-
-
 
 
 $(document).ready(function() {
@@ -124,4 +154,4 @@ $(document).ready(function() {
     .done(function(thresholds) {
         allReady(thresholds[0]);
     });
-});
+})
