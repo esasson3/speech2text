@@ -1,17 +1,31 @@
-let joy = ['bright', 'upbeat', 'glory', 'yellow', 'dynamic', 'alive', 'blissed',
-'buoyant', 'high', 'rapt', 'sunny', 'tickled', 'pink', 'air', 'lifted'];
+let joyAdj = ['bright', 'upbeat', 'glory', 'yellow', 'dynamic', 'alive', 'blissed',
+'buoyant', 'high', 'rapt', 'sunny', 'tickled', 'pink', 'airy', 'lifted', 'pleasant'];
 
-let fear = ['scared', 'sinister', 'tremble', 'shadowy', 'anxious', 'suspect',
-'shady', 'phobia', 'panic', 'alarm', 'risk', 'danger',
-'gamble', 'stakes', 'leap', 'trap', 'exposgure', 'vulnerable'];
+let joyNoun = ['celebration', 'morning', 'light'];
 
-let sadness = ['down', 'gloomy', "melancholy", 'misfortune',
-'pathos', 'woeful', 'blue', 'desolate', 'downbeat', 'downcast', 'flat', 'gloom', 'heavy',
-'sulky', 'cloud'];
+let fearAdj = ['scared', 'sinister', 'tremble', 'anxious', 'suspect',
+'shady', 'trapped', 'exposed', 'vulnerable'];
 
-let anger = ['messed up', 'fury', 'heat', 'tempered', 'bitter', 'bigoted', 'agrieved', 'bent', 'red',
-'shit', 'asperity', 'mood', 'resentment', 'bile', 'funk', 'grudge',
-'fit', 'rancor', 'burn', 'venom', 'wrath'];
+let fearNoun = ['shadow', 'phobia','panic', 'alarm', 'risk', 'danger',
+'gamble', 'stakes'];
+
+let sadnessAdj = ['down', 'gloomy', "melancholy", 'misfortune',
+'pathos', 'woeful', 'blue', 'desolate', 'downbeat', 'downcast', 'flat', 'heavy',
+'sulky'];
+
+let sadnessNoun = ["misfortune", "pathos", "gloom", "cloud"];
+
+let angerAdj = ['messed up',  'tempered', 'bitter', 'bigoted', 'agrieved', 'bent', 'red',
+'moody', 'rancorous', 'burning', 'venomous', ];
+
+let angerNoun = ['fury', 'heat', 'shit', 'damn', 'asperity','resentment','bile', 'funk', 'grudge',
+'fit', 'wrath'];
+
+let anal = ["I think", ""]
+
+let tent = ["maybe", "...", "?"]
+
+let conf = ["definitely", "truly" ]
 
 
 function allReady(thresholds) {
@@ -98,13 +112,19 @@ myRec.continuous = true;
       makeAnalytical(emotionTone, parts, result)
     } else if (languageTone == 'Confident') {
       console.log('Confident')
+      makeConfident(emotionTone, parts, result);
     } else if (languageTone == 'Tentative') {
       console.log('Tentative')
+        makeTentative(emotionTone, parts, result);
     } else {
       console.log('Passive')
+        makePassive(emotionTone, parts, result);
     }
   }
 
+  function wordPicker(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
 
     /*
       Fill out the functions for each structure, follow the directions in makeAnalytical and complete for all functions
@@ -112,36 +132,96 @@ myRec.continuous = true;
     function makeAnalytical(emotionTone, parts, result) {
       /*
           use parts to get the position of a part of speech
-          use result to replace an actual word in the arry
+          use result to replace an actual word in the array
           use emotionTone to choose which array to pick from (joy, fear, etc)
       */
-
+      for (let i = 0; i < result.length; i++){
+          if (parts[i] == '-')
+          let sub = wordPicker(anal);
+          result.splice(i, 0, sub)
+          if (parts[i] == 'a')
+          let sub = whichAdj(emotionTone)
+            result.splice(i, 0, sub)
+          if (parts[i] == 'n')
+          let sub = whichNoun(emotionTone);
+            result.splice(i, sub)
+      }
+      //console.log("new sent" + result);
       /*
         when you've finished subbing words in the array, use javascript native array method join()
         i.e.     result =  ["I'm", "really", "excited", "about", "today"]
         let finalString = result.join(' ');
         * finalString will be 'I'm really excited about today'
       */
+       let finalString = result.join(' ');
+       console.log(finalString);
     }
 
-    function makeConfident() {
-
+    function makeConfident(emotionTone, parts, result) {
+      for (let i = 0; i < result.length; i++){
+          if (parts[i] == '-')
+          result.splice(i, 0, wordPicker(conf))
+          if (parts[i] == 'a')
+            result.splice(i, 0, whichAdj(emotionTone))
+          if (parts[i] == 'n')
+            result.splice(i, whichNoun(emotionTone))
+      }
+      let finalString = result.join(' ');
+      console.log(finalString);
     }
 
-    function makeTentative() {
-
+    function makeTentative(emotionTone, parts, result) {
+      for (let i = 0; i < result.length; i++){
+          if (parts[i] == '-')
+          result.splice(i, 0, wordPicker(tent))
+          if (parts[i] == 'a')
+            result.splice(i, 0, whichAdj(emotionTone))
+          if (parts[i] == 'n')
+            result.splice(i, whichNoun(emotionTone))
+      }
+      let finalString = result.join(' ');
+      console.log(finalString);
     }
 
-    function makePassive() {
-
+    function makePassive(emotionTone, parts, result) {
+      for (let i = 0; i < result.length; i++){
+          if (parts[i] == '-')
+          result.splice(i, 0, wordPicker(tent))
+          if (parts[i] == 'a')
+            result.splice(i, 0, whichAdj(emotionTone))
+          if (parts[i] == 'n')
+            result.splice(i, whichNoun(emotionTone))
+      }
+      let finalString = result.join(' ');
+      console.log(finalString);
   }
 
+  function whichAdj(emotionTone){
+    if (emotionTone == "Fear")
+      return wordPicker(fearAdj);
+    else if (emotionTone == "Joy")
+      return wordPicker(joyAdj);
+    else if (emotionTone == "Anger")
+        return wordPicker(angerAdj);
+    else
+      return wordPicker(sadnessAdj);
+  }
+
+  function whichNoun(emotionTone){
+    if (emotionTone == "Fear")
+      return wordPicker(fearNoun);
+    else if (emotionTone == "Joy")
+      return wordPicker(joyNoun);
+    else if (emotionTone == "Anger")
+        return wordPicker(angerNoun);
+    else
+      return wordPicker(sadnessNoun);
+
+  }
 
   }
 
 }
-
-
 $(document).ready(function() {
   $.ajaxSetup({
       headers: {
