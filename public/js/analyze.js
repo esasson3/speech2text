@@ -310,9 +310,9 @@ function allReady(thresholds) {
                 return wordPicker(sadnessNoun);
 
         }
-
-
 }
+
+
 $(document).ready(function() {
     $.ajaxSetup({
         headers: {
