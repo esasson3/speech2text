@@ -73,3 +73,7 @@ a:hover {
     background-color: transparent;
     padding: 0;
 }
+
+.poem {
+  color: blue;
+}
