@@ -4,7 +4,7 @@ let joyAdj = ['bright', 'upbeat', 'glory', 'yellow', 'dynamic', 'alive', 'blisse
 
 let joyNoun = ['celebration', 'morning', 'light'];
 
-let fearAdj = ['scared', 'sinister', 'tremble', 'anxious', 'suspect',
+let fearAdj = ['scared', 'sinister', 'trembling', 'anxious', 'suspect',
     'shady', 'trapped', 'exposed', 'vulnerable'
 ];
 
@@ -12,12 +12,17 @@ let fearNoun = ['shadow', 'phobia', 'panic', 'alarm', 'risk', 'danger',
     'gamble', 'stakes'
 ];
 
-let sadnessAdj = ['down', 'gloomy', "melancholy", 'misfortune',
-    'pathos', 'woeful', 'blue', 'desolate', 'downbeat', 'downcast', 'flat', 'heavy',
-    'sulky'
+let sadnessAdj = ['down', 'gloomy', "melancholy", 'misfortune', 'woeful', 'blue', 'desolate', 'downbeat', 'downcast', 'flat', 'heavy',
+    'sulky', 'unhappy', 'sorrowful', 'dejected', 'depressed', 'downcast', 'miserable', 'down',
+    'despondent', 'despairing', 'disconsolate', 'desolate', 'wretched', 'glum', 'gloomy', 'doleful', 'dismal', 'melancholy',
+    'mournful', 'woebegone', 'forlorn', 'crestfallen', 'heartbroken', 'inconsolable', 'blue', 'down in/at the mouth',
+    'down in the dumps', 'blah'
 ];
 
-let sadnessNoun = ["misfortune", "pathos", "gloom", "cloud"];
+let sadnessNoun = ["misfortune", "gloom", "cloud", 'sorrow', 'dejection', 'misery', 'despondency',
+'despair', 'desolation', 'wretchedness', 'gloom', 'gloominess', 'dolefulness',
+'melancholy', 'mournfulness', 'woe', 'heartache',
+'grief', 'the blues'];
 
 let angerAdj = ['messed up', 'tempered', 'bitter', 'bigoted', 'agrieved', 'bent', 'red',
     'moody', 'rancorous', 'burning', 'venomous',
@@ -27,11 +32,13 @@ let angerNoun = ['fury', 'heat', 'shit', 'damn', 'asperity', 'resentment', 'bile
     'fit', 'wrath'
 ];
 
-let anal = ["I think", ""]
+let noEmo = ['neutral', 'fine', 'okay', 'calm', 'nonchalant']
 
-let tent = ["maybe", "...", "?"]
+let anal = ["I think", ":", '-', 'if', 'that explains', '$', 'either or'];
 
-let conf = ["definitely", "truly"]
+let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
+
+let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and'];
 
 
 function allReady(thresholds) {
@@ -88,7 +95,7 @@ function allReady(thresholds) {
         if (input.length > 0) { // If we have any sort of input, follow this codepath to send to API
             getToneAnalysis(input); // Pushes the tones into a global array, then pass that array to the timeout function -> timeoutTones
             setTimeout(timeOutTones(globalTones, tonesArr, parts, result), 800); // This timout allows the API results to come back and populate the tonesArray
-            setTimeout(pickFormat(poemToFormat), 2200);
+            setTimeout(pickFormat(poemToFormat), 2500);
           }
       }
 
@@ -111,9 +118,7 @@ function allReady(thresholds) {
       }
 
 
-
       function pickFormat(array) {
-
         let tone = array[0];
         let poem = array[1];
         if (tone == 'Tentative') {
@@ -130,14 +135,12 @@ function allReady(thresholds) {
 
       function formatAnalytical(poem) {
         console.log('formatting poem')
-
         makePoem(poem);
       }
 
 
       function formatConfident(poem) {
         console.log('formatting poem')
-
         makePoem(poem);
 
       }
@@ -171,11 +174,12 @@ function allReady(thresholds) {
 
         function determinesLanguage(tones, parts, result) {
             let languageTone;
-            emotionTone = 'Joy';
+            let emotionTone;
 
             languageTone = tones.filter(tone => tone.length > 7);
-            // emotionTone = tones.filter(eTone => eTone.length < 8);
+            emotionTone = tones.filter(eTone => eTone.length < 8);
             let finalPoem;
+
 
 
             if (languageTone[0] == 'Analytical') {
@@ -209,18 +213,23 @@ function allReady(thresholds) {
                 use result to replace an actual word in the array
                 use emotionTone to choose which array to pick from (joy, fear, etc)
             */
+            console.log(emotionTone);
+            //result.reverse();
+            //result.pop();
+            result.splice(0, wordPicker(anal));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                     let sub = wordPicker(anal);
-                    result.splice(i, 0, sub)
+                    result.splice(i, 1, sub);
+                    result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
                     let sub = whichAdj(emotionTone)
-                    result.splice(i, 0, sub)
+                    result.splice(i, 1, sub);
                 }
                 if (parts[i] == 'n') {
                     let sub = whichNoun(emotionTone);
-                    result.splice(i, sub)
+                    result.splice(i, 0, sub);
                 }
             }
 
@@ -237,15 +246,25 @@ function allReady(thresholds) {
         }
 
         function makeConfident(emotionTone, parts, result) {
+          console.log(emotionTone);
+          //Confident array1 = ["surely" 'noun' 'verb' '-' 'adj' 'adv 'v']
+          //array2 = ["noun" verb' 'noun']
+        //  result.reverse();
+          //result.pop();
+          result.splice(0, wordPicker(conf));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
-                    result.splice(i, 0, wordPicker(conf))
+                  let sub = wordPicker(conf);
+                  result.splice(i, 1, sub);
+                  result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
-                    result.splice(i, 0, whichAdj(emotionTone))
+                  let sub = whichAdj(emotionTone);
+                    result.splice(i, 1, sub);
                 }
                 if (parts[i] == 'n') {
-                    result.splice(i, whichNoun(emotionTone))
+                    let sub = whichNoun(emotionTone);
+                    result.splice(i, 0, sub);
                 }
             }
             let finalString = result.join(' ');
@@ -254,15 +273,23 @@ function allReady(thresholds) {
         }
 
         function makeTentative(emotionTone, parts, result) {
+            console.log(emotionTone);
+          //  result.reverse();
+            //result.pop();
+            result.splice(0, wordPicker(tent));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
-                    result.splice(i, 0, wordPicker(tent))
+                  let sub = wordPicker(tent);
+                  result.splice(i, 1, sub);
+                  result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
-                    result.splice(i, 0, whichAdj(emotionTone))
+                   let sub = whichAdj(emotionTone);
+                   result.splice(i, 1, sub);
                 }
                 if (parts[i] == 'n') {
-                    result.splice(i, whichNoun(emotionTone))
+                  let sub = whichNoun(emotionTone);
+                  result.splice(i, 0, sub);
                 }
             }
 
@@ -272,17 +299,51 @@ function allReady(thresholds) {
         }
 
         function makePassive(emotionTone, parts, result) {
+            console.log(emotionTone);
+            //result.reverse();
+            //result.pop();
+
+            /*let passivePoem = [];
+            let a = parts.indexOf('-');
+            passivePoem.push(result[a]);
+            result.splice(a, 1);
+
+            let b = parts.indexOf('a');
+            passivePoem.push(result[b]);
+            result.splice(b, 1);
+
+            let sub = whichAdj(emotionTone);
+            passivePoem.push(sub);
+
+            let c = parts.indexOf('n');
+            passivePoem.push(result[c]);
+            result.splice(c, 1);
+
+            let d = parts.indexOf('v');
+            passivePoem.push(result[d]);
+            result.splice(d, 1);
+
+            let e = parts.indexOf('-');
+            passivePoem.push(result[e]);
+            result.splice(e, 1);
+*/
+
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
-                    result.splice(i, 0, wordPicker(tent))
+                  let sub = wordPicker(conf);
+                  result.splice(i, 1, sub);
+                  result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
-                    result.splice(i, 0, whichAdj(emotionTone))
+                  let sub = whichAdj(emotionTone);
+                  result.splice(i, 1, sub);
                 }
                 if (parts[i] == 'n') {
-                    result.splice(i, whichNoun(emotionTone))
+                    let sub = whichNoun(emotionTone);
+                    result.splice(i, 0, sub);
                 }
             }
+
             let finalString = result.join(' ');
             console.log(finalString);
             return finalString;
@@ -296,7 +357,7 @@ function allReady(thresholds) {
             else if (emotionTone == "Anger")
                 return wordPicker(angerAdj);
             else
-                return wordPicker(sadnessAdj);
+                return wordPicker(noEmo);
         }
 
         function whichNoun(emotionTone) {
@@ -307,8 +368,7 @@ function allReady(thresholds) {
             else if (emotionTone == "Anger")
                 return wordPicker(angerNoun);
             else
-                return wordPicker(sadnessNoun);
-
+                return wordPicker(noEmo);
         }
 }
 
