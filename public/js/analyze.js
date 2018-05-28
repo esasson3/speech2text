@@ -16,13 +16,13 @@ let sadnessAdj = ['down', 'gloomy', "melancholy", 'misfortune', 'woeful', 'blue'
     'sulky', 'unhappy', 'sorrowful', 'dejected', 'depressed', 'downcast', 'miserable', 'down',
     'despondent', 'despairing', 'disconsolate', 'desolate', 'wretched', 'glum', 'gloomy', 'doleful', 'dismal', 'melancholy',
     'mournful', 'woebegone', 'forlorn', 'crestfallen', 'heartbroken', 'inconsolable', 'blue', 'down in/at the mouth',
-    'down in the dumps', 'blah'
+    'down in the dumps', 'blah', 'b l a h'
 ];
 
 let sadnessNoun = ["misfortune", "gloom", "cloud", 'sorrow', 'dejection', 'misery', 'despondency',
-'despair', 'desolation', 'wretchedness', 'gloom', 'gloominess', 'dolefulness',
+'despair', 'desolation', 'wretchedness', 'g l o o m', 'gloominess', 'dolefulness',
 'melancholy', 'mournfulness', 'woe', 'heartache',
-'grief', 'the blues'];
+'grief', 'the blues', 'eh'];
 
 let angerAdj = ['messed up', 'tempered', 'bitter', 'bigoted', 'agrieved', 'bent', 'red',
     'moody', 'rancorous', 'burning', 'venomous',
@@ -32,13 +32,14 @@ let angerNoun = ['fury', 'heat', 'shit', 'damn', 'asperity', 'resentment', 'bile
     'fit', 'wrath'
 ];
 
-let noEmo = ['neutral', 'fine', 'okay', 'calm', 'nonchalant']
+let noEmo = ['neutral', 'fine', 'okay', 'calm', 'nonchalant',
+'so-so', 'f i n e', 'alright']
 
 let anal = ["I think", ":", '-', 'if', 'that explains', '$', 'either or'];
 
 let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
 
-let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and'];
+let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and', 'yes', 'no,'];
 
 
 function allReady(thresholds) {
