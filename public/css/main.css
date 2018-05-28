@@ -1,8 +1,8 @@
 * {
-  font-family: "Work Sans";
-font-stretch: extra-expanded;
+/* font-family: "Work Sans"; */
+/* font-stretch: extra-expanded; */
 color: black;
-background-color: transparent;
+/* background-color: transparent; */
 margin-left: 100px;
 }
 
@@ -16,54 +16,17 @@ margin-left: 100px;
 
 .poem {
   /*word-break: break-all;*/
-  width: 250px;
-  font-size: xx-large;
-}
-/
-/*p.poem span::. {
-  content: "\A";
-  white-space: pre;
-}
-p.poem span::! {
-  content: "\A";
-  white-space: pre;
+  /* width: 250px; */
+  /* font-size: xx-large; */
 }
 
-p.poem {
-  text-align: center;
-  overflow: hidden;
-  /* Ensures the content is not revealed until the animation */
-  /*border-right: .15em solid red;
-  /* The typwriter cursor */
-/*  white-space: nowrap;
-  ;
-  /* Keeps the content on a single line */
-  /*//margin: 0 auto;
-  /* Gives that scrolling effect as the typing happens */
-  /*letter-spacing: .15em;
-  /* Adjust as needed */
-/*  animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+span {
+  border-right: .05em solid;
+  animation: caret 1s steps(1) infinite;
 }
 
-/* The typing effect */
-
-/*@keyframes typing {
-  from {
-    width: 0
-  }
-  to {
-    width: 100%
-  }
-}
-
-/* The typewriter cursor effect */
-
-/*@keyframes blink-caret {
-  from, to {
-    border-color: transparent
-  }
+@keyframes caret {
   50% {
-    border-color: orange;
+    border-color: transparent;
   }
 }
-*/

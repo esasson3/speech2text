@@ -40,7 +40,7 @@ let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
 
 let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and'];
 
-
+let index = 0;
 function allReady(thresholds) {
 
     function _error(error) {
@@ -163,19 +163,35 @@ function allReady(thresholds) {
         makePoem(poem);
       }
 
+      function replaceAt(string, index, replace) {
+        return string.substring(0, index) + replace + string.substring(index + 1);
+      }
+
+
       function makePoem(finalString) {
         console.log('making poem')
+        let text = finalString.split(/\r?\n/);
+
 
         let container = document.getElementById('container');
-
+        let id = 'poem' + index;
         let newPoem = document.createElement('p');
             newPoem.setAttribute('class', 'poem')
-        let node = document.createTextNode(finalString);
+            newPoem.setAttribute('id', id)
+            container.appendChild(newPoem);
 
-
-        newPoem.appendChild(node);
-        container.appendChild(newPoem);
+  
+        text.forEach(function(e) {
+          let node = document.createTextNode(e);
+          let lineBreak = document.createElement("BR");
+          newPoem.appendChild(node);
+          newPoem.appendChild(lineBreak);
+        });
+        index++;
       }
+
+
+
 
 
         function determinesLanguage(tones, parts, result) {
@@ -226,8 +242,8 @@ function allReady(thresholds) {
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                     let sub = wordPicker(anal);
-                    result.splice(i, 1, sub);
-                    result.splice(i, 0, '\n');
+                    result.splice(i, 1, sub + "\n");
+                    // result.splice(i, 0, ' \n');
                 }
                 if (parts[i] == 'a') {
                     let sub = whichAdj(emotionTone)
@@ -252,17 +268,12 @@ function allReady(thresholds) {
         }
 
         function makeConfident(emotionTone, parts, result) {
-          console.log(emotionTone);
-          //Confident array1 = ["surely" 'noun' 'verb' '-' 'adj' 'adv 'v']
-          //array2 = ["noun" verb' 'noun']
-        //  result.reverse();
-          //result.pop();
           result.splice(0, wordPicker(conf));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(conf);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, 'zoe \n');
                 }
                 if (parts[i] == 'a') {
                   let sub = whichAdj(emotionTone);
@@ -279,15 +290,12 @@ function allReady(thresholds) {
         }
 
         function makeTentative(emotionTone, parts, result) {
-            console.log(emotionTone);
-          //  result.reverse();
-            //result.pop();
             result.splice(0, wordPicker(tent));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(tent);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
                    let sub = whichAdj(emotionTone);
@@ -306,39 +314,12 @@ function allReady(thresholds) {
 
         function makePassive(emotionTone, parts, result) {
             console.log(emotionTone);
-            //result.reverse();
-            //result.pop();
-
-            /*let passivePoem = [];
-            let a = parts.indexOf('-');
-            passivePoem.push(result[a]);
-            result.splice(a, 1);
-
-            let b = parts.indexOf('a');
-            passivePoem.push(result[b]);
-            result.splice(b, 1);
-
-            let sub = whichAdj(emotionTone);
-            passivePoem.push(sub);
-
-            let c = parts.indexOf('n');
-            passivePoem.push(result[c]);
-            result.splice(c, 1);
-
-            let d = parts.indexOf('v');
-            passivePoem.push(result[d]);
-            result.splice(d, 1);
-
-            let e = parts.indexOf('-');
-            passivePoem.push(result[e]);
-            result.splice(e, 1);
-*/
 
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(conf);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
                   let sub = whichAdj(emotionTone);
@@ -349,9 +330,8 @@ function allReady(thresholds) {
                     result.splice(i, 0, sub);
                 }
             }
-
+            console.log(result)
             let finalString = result.join(' ');
-            console.log(finalString);
             return finalString;
         }
 
