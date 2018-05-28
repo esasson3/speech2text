@@ -41,7 +41,7 @@ let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
 
 let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and', 'yes', 'no,'];
 
-
+let index = 0;
 function allReady(thresholds) {
 
     function _error(error) {
@@ -59,7 +59,6 @@ function allReady(thresholds) {
 
 
     let myRec = new p5.SpeechRec('en-US'); // Speech capture item
-    myRec.continuous = true;
 
     function toneCallback(data) {
         let tones = data.document_tone.tones.slice(0);
@@ -81,10 +80,17 @@ function allReady(thresholds) {
         return RiTa.getPosTags(input, true);
     }
 
-    $('#start_button').on('click', function() { // On click, start recording
+
+    $( "#start_button" )
+      .mouseup(function() {
+        console.log('stopping')
+        myRec.stop;
+      })
+      .mousedown(function() {
+        console.log('starting')
         myRec.start();
         myRec.onResult = parseSpeech;
-    });
+        });
 
     function parseSpeech() {
         let input = myRec.resultString;
@@ -96,7 +102,6 @@ function allReady(thresholds) {
         if (input.length > 0) { // If we have any sort of input, follow this codepath to send to API
             getToneAnalysis(input); // Pushes the tones into a global array, then pass that array to the timeout function -> timeoutTones
             setTimeout(timeOutTones(globalTones, tonesArr, parts, result), 800); // This timout allows the API results to come back and populate the tonesArray
-            setTimeout(pickFormat(poemToFormat), 2500);
           }
       }
 
@@ -109,7 +114,7 @@ function allReady(thresholds) {
               poem = determinesLanguage(arr, parts, result);
               returnPoem(poem);
               globalTones = []; // Resets the global array to be empty
-
+              pickFormat(poemToFormat)
           }
       }
 
@@ -120,17 +125,20 @@ function allReady(thresholds) {
 
 
       function pickFormat(array) {
-        let tone = array[0];
-        let poem = array[1];
-        if (tone == 'Tentative') {
-          formatTentative(poem)
-        } else if (tone == 'Analytical') {
-          formatAnalytical(poem)
-        } else if (tone == 'Confident') {
-          formatConfident(poem)
-        } else {
-          formatPassive(poem)
+        if (array) {
+          let tone = array[0];
+          let poem = array[1];
+          if (tone == 'Tentative') {
+            formatTentative(poem)
+          } else if (tone == 'Analytical') {
+            formatAnalytical(poem)
+          } else if (tone == 'Confident') {
+            formatConfident(poem)
+          } else {
+            formatPassive(poem)
+          }
         }
+
       }
 
 
@@ -148,29 +156,43 @@ function allReady(thresholds) {
 
       function formatTentative(poem) {
         console.log('formatting poem')
-
         makePoem(poem);
       }
 
       function formatPassive(poem) {
         console.log('formatting poem')
-
         makePoem(poem);
       }
 
+      function replaceAt(string, index, replace) {
+        return string.substring(0, index) + replace + string.substring(index + 1);
+      }
+
+
       function makePoem(finalString) {
         console.log('making poem')
+        let text = finalString.split(/\r?\n/);
+
 
         let container = document.getElementById('container');
-
+        let id = 'poem' + index;
         let newPoem = document.createElement('p');
             newPoem.setAttribute('class', 'poem')
-        let node = document.createTextNode(finalString);
+            newPoem.setAttribute('id', id)
+            container.appendChild(newPoem);
 
-
-        newPoem.appendChild(node);
-        container.appendChild(newPoem);
+  
+        text.forEach(function(e) {
+          let node = document.createTextNode(e);
+          let lineBreak = document.createElement("BR");
+          newPoem.appendChild(node);
+          newPoem.appendChild(lineBreak);
+        });
+        index++;
       }
+
+
+
 
 
         function determinesLanguage(tones, parts, result) {
@@ -179,9 +201,12 @@ function allReady(thresholds) {
 
             languageTone = tones.filter(tone => tone.length > 7);
             emotionTone = tones.filter(eTone => eTone.length < 8);
+
+            if (emotionTone.length < 4) {
+              emotionTone = wordPicker(noEmo);
+              console.log('emo', emotionTone)
+            }
             let finalPoem;
-
-
 
             if (languageTone[0] == 'Analytical') {
                 console.log('Analytical')
@@ -194,7 +219,6 @@ function allReady(thresholds) {
                 finalPoem = makeTentative(emotionTone, parts, result);
             } else {
                 console.log('Passive')
-              languageTone = 'Passive';
               finalPoem = makePassive(emotionTone, parts, result);
             }
 
@@ -214,15 +238,13 @@ function allReady(thresholds) {
                 use result to replace an actual word in the array
                 use emotionTone to choose which array to pick from (joy, fear, etc)
             */
-            console.log(emotionTone);
-            //result.reverse();
-            //result.pop();
+
             result.splice(0, wordPicker(anal));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                     let sub = wordPicker(anal);
-                    result.splice(i, 1, sub);
-                    result.splice(i, 0, '\n');
+                    result.splice(i, 1, sub + "\n");
+                    // result.splice(i, 0, ' \n');
                 }
                 if (parts[i] == 'a') {
                     let sub = whichAdj(emotionTone)
@@ -247,17 +269,12 @@ function allReady(thresholds) {
         }
 
         function makeConfident(emotionTone, parts, result) {
-          console.log(emotionTone);
-          //Confident array1 = ["surely" 'noun' 'verb' '-' 'adj' 'adv 'v']
-          //array2 = ["noun" verb' 'noun']
-        //  result.reverse();
-          //result.pop();
           result.splice(0, wordPicker(conf));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(conf);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, 'zoe \n');
                 }
                 if (parts[i] == 'a') {
                   let sub = whichAdj(emotionTone);
@@ -274,15 +291,12 @@ function allReady(thresholds) {
         }
 
         function makeTentative(emotionTone, parts, result) {
-            console.log(emotionTone);
-          //  result.reverse();
-            //result.pop();
             result.splice(0, wordPicker(tent));
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(tent);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
                    let sub = whichAdj(emotionTone);
@@ -301,39 +315,12 @@ function allReady(thresholds) {
 
         function makePassive(emotionTone, parts, result) {
             console.log(emotionTone);
-            //result.reverse();
-            //result.pop();
-
-            /*let passivePoem = [];
-            let a = parts.indexOf('-');
-            passivePoem.push(result[a]);
-            result.splice(a, 1);
-
-            let b = parts.indexOf('a');
-            passivePoem.push(result[b]);
-            result.splice(b, 1);
-
-            let sub = whichAdj(emotionTone);
-            passivePoem.push(sub);
-
-            let c = parts.indexOf('n');
-            passivePoem.push(result[c]);
-            result.splice(c, 1);
-
-            let d = parts.indexOf('v');
-            passivePoem.push(result[d]);
-            result.splice(d, 1);
-
-            let e = parts.indexOf('-');
-            passivePoem.push(result[e]);
-            result.splice(e, 1);
-*/
 
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                   let sub = wordPicker(conf);
-                  result.splice(i, 1, sub);
-                  result.splice(i, 0, '\n');
+                  result.splice(i, 1,  sub + "\n");
+                  // result.splice(i, 0, '\n');
                 }
                 if (parts[i] == 'a') {
                   let sub = whichAdj(emotionTone);
@@ -344,9 +331,8 @@ function allReady(thresholds) {
                     result.splice(i, 0, sub);
                 }
             }
-
+            console.log(result)
             let finalString = result.join(' ');
-            console.log(finalString);
             return finalString;
         }
 
