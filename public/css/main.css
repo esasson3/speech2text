@@ -1,8 +1,9 @@
 * {
-  font-family: 'Inconsolata', sans-serif;
-  color: white;
-  background-color: black;
-  margin-left: 100px;
+  font-family: "Work Sans";
+font-stretch: extra-expanded;
+color: black;
+background-color: transparent;
+margin-left: 100px;
 }
 
 .info {
@@ -15,8 +16,8 @@
 
 .poem {
   /*word-break: break-all;*/
-  width: 400px;
-  font-size: x-large;
+  width: 250px;
+  font-size: xx-large;
 }
 /
 /*p.poem span::. {
