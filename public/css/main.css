@@ -35,14 +35,3 @@ margin-left: 100px;
   /* width: 250px; */
   /* font-size: xx-large; */
 }
-
-span {
-  border-right: .05em solid;
-  animation: caret 1s steps(1) infinite;
-}
-
-@keyframes caret {
-  50% {
-    border-color: transparent;
-  }
-}
