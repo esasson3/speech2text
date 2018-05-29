@@ -1,9 +1,9 @@
 * {
-/* font-family: "Work Sans"; */
-/* font-stretch: extra-expanded; */
-color: black;
-/* background-color: transparent; */
-margin-left: 100px;
+font-family: "Work Sans";
+}
+
+body {
+  margin: 4%;
 }
 /*#start_button{
   width: 50px;
@@ -13,10 +13,6 @@ margin-left: 100px;
   width: 50px;
   height: 50px;
 }*/
-.button {
-  right: 10px;
-  position: fixed;
-}
 
 #start {
 
@@ -36,13 +32,17 @@ margin-left: 100px;
   /* font-size: xx-large; */
 }
 
-span {
-  border-right: .05em solid;
-  animation: caret 1s steps(1) infinite;
+
+
+button {
+  padding: 4px;
+  border: 1px solid black;
+  box-shadow: none;
+  background: white;
+  font-size: 14px;
 }
 
-@keyframes caret {
-  50% {
-    border-color: transparent;
-  }
+button:hover {
+  background: black;
+  color: white;
 }

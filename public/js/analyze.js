@@ -42,8 +42,8 @@ let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
 let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and', 'yes', 'no,'];
 
 let index = 0;
-function allReady(thresholds) {
 
+function allReady(thresholds) {
     function _error(error) {
         var message = typeof error.responseJSON.error === 'string' ?
             error.responseJSON.error :
@@ -83,11 +83,11 @@ function allReady(thresholds) {
 
     $( "#start_button" )
       .mouseup(function() {
-        console.log('stopping')
+        $(this).css('background', 'white');
         myRec.stop;
       })
       .mousedown(function() {
-        console.log('starting')
+        $(this).css('background', 'red');
         myRec.start();
         myRec.onResult = parseSpeech;
         });
@@ -181,7 +181,7 @@ function allReady(thresholds) {
             newPoem.setAttribute('id', id)
             container.appendChild(newPoem);
 
-  
+
         text.forEach(function(e) {
           let node = document.createTextNode(e);
           let lineBreak = document.createElement("BR");

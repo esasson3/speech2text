@@ -12,25 +12,34 @@
     <h1 class="center" id="headline"></h1>
       <div>
           <div class="right">
-            <button id="start_button">
-              <img id="start_img" src="/images/mic.gif" alt="Start">
+            <button class="button" id="start_button">
+              Start
+              <!-- <img id="start_img" src="/images/mic.gif" alt="Start"> -->
             </button>
-            <button id="print_button" >
-              <img id="print_img" src="/images/print.png" alt="Print">
+            <button  class="button"  id="print_button" >
+              Print
+              <!-- <img id="print_img" src="/images/print.png" alt="Print"> -->
             </button>
-            <button id="question_button" >
-              <img id="question_img" src="/images/question.png" alt="question">
+            <button class="button"  id="question_button" >
+              Ask
+              <!-- <img id="question_img" src="/images/question.png" alt="question"> -->
             </button>
           </div>
       <div id="container"></div>
-      <div class = "pics" >
-    <img src="/images/start_image.png"  id = "start" alt="start" style="width:1000px
-    ">
-  </div>
+
+
+      <div id="startModal" style="display:none">
+        <h3>Hi i am poet</h3>
+        <p>further instructions</p>
+        <h4>print when finished</h4>
+      </div>
+
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/vendors/prism.js"></script>
     <script type="text/javascript" src="js/components/helpers.js"></script>
     <script type="text/javascript" src="js/components/App.js"></script>
@@ -41,6 +50,8 @@
     <script type="text/javascript" src="js/rita-full.js"></script>
 
     <script type="text/javascript" src="js/analyze.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
 
 
 </body>
