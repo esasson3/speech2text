@@ -76,6 +76,15 @@ function allReady(thresholds) {
         ).fail(_error);
     }
 
+    function postResponse(poem) {
+      $.ajax({
+        url: '/print',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ poem: poem })}
+      )
+    }
+
     function getPartsOfSpeech(input) {
         return RiTa.getPosTags(input, true);
     }
@@ -171,8 +180,9 @@ function allReady(thresholds) {
 
       function makePoem(finalString) {
         console.log('making poem')
-        let text = finalString.split(/\r?\n/);
+        postResponse(finalString);
 
+        let text = finalString.split(/\r?\n/);
 
         let container = document.getElementById('container');
         let id = 'poem' + index;
@@ -190,8 +200,6 @@ function allReady(thresholds) {
         });
         index++;
       }
-
-
 
 
 
