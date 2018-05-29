@@ -1,9 +1,9 @@
 * {
-/* font-family: "Work Sans"; */
-/* font-stretch: extra-expanded; */
-color: black;
-/* background-color: transparent; */
-margin-left: 100px;
+font-family: "Work Sans";
+}
+
+body {
+  margin: 4%;
 }
 /*#start_button{
   width: 50px;
@@ -13,10 +13,6 @@ margin-left: 100px;
   width: 50px;
   height: 50px;
 }*/
-.button {
-  right: 10px;
-  position: fixed;
-}
 
 #start {
 
@@ -34,4 +30,19 @@ margin-left: 100px;
   /*word-break: break-all;*/
   /* width: 250px; */
   /* font-size: xx-large; */
+}
+
+
+
+button {
+  padding: 4px;
+  border: 1px solid black;
+  box-shadow: none;
+  background: white;
+  font-size: 14px;
+}
+
+button:hover {
+  background: black;
+  color: white;
 }
