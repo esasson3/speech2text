@@ -26,23 +26,89 @@ body {
   float: right;
 }
 
-.poem {
-  /*word-break: break-all;*/
-  /* width: 250px; */
-  /* font-size: xx-large; */
+h3 {
+  font-family: "Work Sans";
+  text-transform: uppercase;
+  font-weight: extrabold;
+  font-size: 2em;
 }
 
+h4 {
+  font-family: "Work Sans";
+  font-weight: bold;
+  font-size: 18px;
+  text-transform: uppercase;
 
+}
+p {
+  font-family: "Inconsolata";
+  line-height: 1.5;
+  font-size: 18px;
+
+}
+
+.poem {
+  font-family: "Inconsolata";
+  margin-top: 20px;
+  margin-left: 10px;
+  font-size: 20px;
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid orange; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  animation:
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+#startModal {
+
+height: 500px;
+padding: 25px;
+outline: 1px solid black;
+position: fixed;
+display: inline-block;
+right:60px;
+top:75px;
+
+}
+.ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close{
+  top: 0px;
+  left:0px;
+}
+
+#start_button{
+  top: 15px;
+  position: fixed;
+  right: 60px;
+}
+
+#question_button{
+  top: 15px;
+  position: fixed;
+}
 
 button {
+  display:inline-block;
   padding: 4px;
   border: 1px solid black;
   box-shadow: none;
   background: white;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 button:hover {
   background: black;
   color: white;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: transparent; }
 }

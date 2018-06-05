@@ -1,5 +1,6 @@
 let joyAdj = ['bright', 'upbeat', 'glory', 'yellow', 'dynamic', 'alive', 'blissed',
-    'buoyant', 'high', 'rapt', 'sunny', 'tickled', 'pink', 'airy', 'lifted', 'pleasant'
+    'buoyant', 'high', 'rapt', 'sunny', 'tickled', 'pink',
+    'airy', 'lifted', 'pleasant', ':)'
 ];
 
 let joyNoun = ['celebration', 'morning', 'light'];
@@ -25,7 +26,7 @@ let sadnessNoun = ["misfortune", "gloom", "cloud", 'sorrow', 'dejection', 'miser
 'grief', 'the blues', 'eh'];
 
 let angerAdj = ['messed up', 'tempered', 'bitter', 'bigoted', 'agrieved', 'bent', 'red',
-    'moody', 'rancorous', 'burning', 'venomous',
+    'moody', 'rancorous', 'burning', 'venomous', ':('
 ];
 
 let angerNoun = ['fury', 'heat', 'shit', 'damn', 'asperity', 'resentment', 'bile', 'funk', 'grudge',
@@ -33,13 +34,15 @@ let angerNoun = ['fury', 'heat', 'shit', 'damn', 'asperity', 'resentment', 'bile
 ];
 
 let noEmo = ['neutral', 'fine', 'okay', 'calm', 'nonchalant',
-'so-so', 'f i n e', 'alright']
+'so-so', 'f i n e', 'alright.', 'C A L M', 'it is'];
 
-let anal = ["I think", ":", '-', 'if', 'that explains', '$', 'either or'];
+let anal = ["I think", ":", '-', 'if', 'that explains', '$', 'either or', '-', ';'];
 
-let tent = ["maybe", "...", "?", 'I guess', 'hmm', '/', 'or', "but..."];
+let tent = ["maybe", "...", "?", 'I guess',
+'hmm', '/', 'or', "but...", 'possibly', 'ok,', 'O.K.', 'HMMMM'];
 
-let conf = ["definitely", "truly",'I believe', 'surely',  "!", '.', 'and', 'yes', 'no,'];
+let conf = ["definitely", "truly",'I believe',
+'surely',  "!", '.', 'and', 'yes', 'no,', 'Y E S'];
 
 let index = 0;
 
@@ -97,6 +100,8 @@ function allReady(thresholds) {
       })
       .mousedown(function() {
         $(this).css('background', 'red');
+        $(this).css('text-color', 'white');
+        $(this).css('outline-color', 'white');
         myRec.start();
         myRec.onResult = parseSpeech;
         });
@@ -210,10 +215,11 @@ function allReady(thresholds) {
             languageTone = tones.filter(tone => tone.length > 7);
             emotionTone = tones.filter(eTone => eTone.length < 8);
 
-            if (emotionTone.length < 4) {
-              emotionTone = wordPicker(noEmo);
-              console.log('emo', emotionTone)
-            }
+//whats going on here
+          //  if (emotionTone.length < 4) {
+              //emotionTone = wordPicker(noEmo);
+              //console.log('emo', emotionTone)
+            //}
             let finalPoem;
 
             if (languageTone[0] == 'Analytical') {
@@ -251,8 +257,11 @@ function allReady(thresholds) {
             for (let i = 0; i < result.length; i++) {
                 if (parts[i] == '-') {
                     let sub = wordPicker(anal);
+                    if (result[i].length < 3){
                     result.splice(i, 1, sub + "\n");
-                    // result.splice(i, 0, ' \n');
+                  } else {
+                    result.splice(i, 0, '\n');
+                    }
                 }
                 if (parts[i] == 'a') {
                     let sub = whichAdj(emotionTone)

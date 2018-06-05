@@ -28,7 +28,7 @@ app.get('/', function(req, res) {
 
 app.post('/print', function(req, res) {
   var poem = req.body.poem;
-  print(poem);
+  print(poem); //comment out to stop print
 })
 
 app.post('/api/tone', function(req, res, next) {
@@ -43,14 +43,20 @@ app.post('/api/tone', function(req, res, next) {
 function print(data) {
   if (printer) {
     device.open(function(err){
-    printer
-    .font('a')
-    .align('ct')
-    .style('bu')
-    .size(1, 1)
-    .text(data)
-    .cut()
-    .close()
+    printer.color(1)
+    printer.size(2, 1)
+    printer.font('a')
+    printer.text('*:._.:*~*:._.:*.:*~*:._.:*~*:._')
+    printer.text('\n')
+    printer.font('b') //a or b type
+    printer.align('lt') //LT is left CT is center RT is right
+    printer.style('bu')
+    printer.size(2, 2)
+    printer.text(data)
+    printer.text('\n')
+    printer.size(2, 1)
+    //.cut()
+    printer.close()
   });
   }
 }
