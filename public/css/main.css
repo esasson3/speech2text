@@ -114,3 +114,12 @@ button:hover {
   from, to { border-color: transparent }
   50% { border-color: transparent; }
 }
+
+.ui-dialog-titlebar-close,
+.ui-dialog-titlebar {
+    visibility: hidden;
+}
+
+*:focus {
+    outline: none;
+}
