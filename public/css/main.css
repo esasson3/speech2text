@@ -41,14 +41,16 @@ h4 {
 
 }
 p {
-  font-family: "Inconsolata";
+  font-family: 'Roboto Mono', monospace;
+  font-weight: light;
   line-height: 1.5;
   font-size: 18px;
 
 }
 
 .poem {
-  font-family: "Inconsolata";
+  font-family: 'Roboto Mono', monospace;
+  font-weight: light;
   margin-top: 20px;
   margin-left: 10px;
   font-size: 20px;
@@ -64,7 +66,7 @@ p {
 
 height: 500px;
 padding: 25px;
-outline: 1px solid black;
+outline: 1.5px solid black;
 position: fixed;
 display: inline-block;
 right:60px;
